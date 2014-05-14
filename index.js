@@ -1,5 +1,6 @@
 var Formula = require('fparser'),
     inquander = require('inquander'),
+    inquirer = require('inquirer'),
     _ = require('lodash'),
     program = require('commander');
 
@@ -7,16 +8,30 @@ program
     .version('0.0.1')
     .command('* <formula> [values]')
     .description('Parses a mathematical formula from a string')
-    .action(function(formula, values) {
-        var values = getValuesObject(values),
-            result = Formula.calc(formula, values);
-        console.log('Formula:', formula);
-        console.log('Values:', values);
-        console.log('Result:', result);
+    .action(function(expression, values) {
+        var formula = new Formula(expression),
+            variables = formula.getVariables(),
+            result;
+        if (values) {
+            result = formula.evaluate(getValuesObject(values));
+            console.log('Result:', result);
+        } else {
+            inquirer.prompt(_.map(variables, function(variable) {
+                return {
+                    type: 'input',
+                    name: variable,
+                    message: variable
+                };
+            }), function(answers) {
+                result = formula.evaluate(answers);
+                console.log('Result:', result);
+            });
+        }
     });
 
 inquander.parse(program, process.argv, {
-    defaultCommand: '*'
+    defaultCommand: '*',
+    hidden: ['values']
 });
 
 function getValuesObject(values) {

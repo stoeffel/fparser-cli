@@ -1,6 +1,6 @@
 {
   "name": "fparser-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI for fparser",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "fparser": "~1.2.0",
     "inquander": "~1.0.0",
     "commander": "~2.2.0",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "inquirer": "~0.4.1"
   }
 }
